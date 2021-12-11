@@ -79,7 +79,7 @@ public class Comparator {
                 } else continue;
             }
         }
-        if (!handleReader.isSortAsc("price")) Collections.reverse(sortedProductsByRate);
+        if (!handleReader.isSortAsc("rate")) Collections.reverse(sortedProductsByRate);
         return sortedProductsByRate;
     }
 
