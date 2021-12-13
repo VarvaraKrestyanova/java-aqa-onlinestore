@@ -1,10 +1,8 @@
 package com.issoft.auto.domain.abilities;
 
 import com.issoft.auto.domain.Product;
-import org.xml.sax.SAXException;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -12,8 +10,14 @@ public class Comparator {
 
     HandleReader handleReader = new HandleReader();
 
-    private Object getValue(Product product, String valueName) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        return product.getClass().getMethod(valueName).invoke(product);
+    private Object getValue(Product product, String valueName){
+        Object resultValue = null;
+        try {
+            resultValue = product.getClass().getMethod(valueName).invoke(product);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return resultValue;
     }
 
     private String nameOfGetMethod(String attributeName){
@@ -24,68 +28,44 @@ public class Comparator {
         Collections.reverse(listName);
     }
 
-    public List<Product> sortBy(List<Product> products, String attributeNameToSortBy) throws ParserConfigurationException, SAXException, IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public List<Product> sortBy(List<Product> products, String attributeNameToSortBy) {
 
-        List<String> valuesBasedOnAttribute = new ArrayList<>();
-        for (Product product : products) {
-            valuesBasedOnAttribute.add(getValue(product, nameOfGetMethod(attributeNameToSortBy)).toString());
-        }
-        Collections.sort(valuesBasedOnAttribute);
-
-        List<Product> sortedProductsByAttribute = new ArrayList<>();
-        for (String value : valuesBasedOnAttribute) {
-            for (int j = 0; j < products.size(); j++) {
-                if (value.equals(getValue(products.get(j), nameOfGetMethod(attributeNameToSortBy)).toString())) {
-                    sortedProductsByAttribute.add(products.get(j));
-                    products.remove(j);
-                    break;
-                } else continue;
+        Collections.sort(products, new java.util.Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return String.valueOf(getValue(o1, nameOfGetMethod(attributeNameToSortBy))).compareTo(String.valueOf(getValue(o2, nameOfGetMethod(attributeNameToSortBy))));
             }
-        }
-        if (!handleReader.isSortAsc(attributeNameToSortBy)) reverseList(sortedProductsByAttribute);
-        return sortedProductsByAttribute;
+        });
+
+        if (!handleReader.isSortAsc(attributeNameToSortBy)) reverseList(products);
+        return products;
 
     }
 
-    public List<Product> sortByAllAttributes(List<Product> products) throws NoSuchMethodException, IllegalAccessException, SAXException, ParserConfigurationException, InvocationTargetException, IOException {
+    public List<Product> sortByAllAttributes (List<Product> products) {
 
         List<String> attributeNames = handleReader.attributeNames();
-        List<Product> sortedByFirstAtr = sortBy(products, attributeNames.get(0));
-        List<Product> sortedProductsBy = sortedByFirstAtr;
 
-        for (int m = 1; m < attributeNames.size(); m++){
-            for (int i = 0; i < sortedByFirstAtr.size(); i++){
+        Collections.sort(products, new java.util.Comparator<Product>() {
+            @Override
+            public int compare(Product product1, Product product2) {
+                CompareToBuilder compareToBuilder = new CompareToBuilder();
 
-                List<Product> sameValues = new ArrayList<>();
-                sameValues.add(sortedByFirstAtr.get(i));
-
-                if (i == (sortedByFirstAtr.size()-1)) break;
-                else {
-
-                    for (int j = i; j < sortedByFirstAtr.size(); j++){
-
-                        if ((getValue(sortedByFirstAtr.get(j), nameOfGetMethod(attributeNames.get(m-1))).toString()) == (getValue(sortedByFirstAtr.get(j+1), nameOfGetMethod(attributeNames.get(m-1))).toString())) {
-                            sameValues.add(sortedByFirstAtr.get(i++));
-                        } else {
-                            j = sortedByFirstAtr.size();
-
-                        }
+                for (String attributeName : attributeNames) {
+                    if (handleReader.isSortAsc(attributeName)){
+                        compareToBuilder = compareToBuilder.append(getValue(product1, nameOfGetMethod(attributeName)), getValue(product2, nameOfGetMethod(attributeName)));
+                    } else {
+                        compareToBuilder = compareToBuilder.append(getValue(product2, nameOfGetMethod(attributeName)), getValue(product1, nameOfGetMethod(attributeName)));
                     }
 
-                    if (sameValues.size() > 1) {
-                        sortBy(sameValues, attributeNames.get(m));
-                        int y = i - sameValues.size() + 1;
-                        for (int k = 0; k < sameValues.size(); k++){
-                            sortedProductsBy.set(y, sameValues.get(k));
-                            y++;
-                        }
-                    } else break;
-                }
-            }
-            sortedByFirstAtr = sortedProductsBy;
-        }
 
-        return sortedProductsBy;
+                }
+
+                return compareToBuilder.toComparison();
+            }
+        });
+
+        return products;
     }
 
 }

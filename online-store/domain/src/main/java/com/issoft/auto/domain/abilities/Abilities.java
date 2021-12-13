@@ -5,20 +5,19 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class Abilities {
 
     Comparator comparator = new Comparator();
 
-    public void sortAndPrint(List<Product> products) throws ParserConfigurationException, SAXException, IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void sortAndPrint(List<Product> products) {
         for (Product product: comparator.sortByAllAttributes(products)){
             System.out.println("Name: " + product.getName() + ", Rate: " + product.getRate() + ", Price: " + product.getPrice());
         }
     }
 
-    public void printTop5ByPriceDesc(List<Product> products) throws NoSuchMethodException, IllegalAccessException, SAXException, ParserConfigurationException, InvocationTargetException, IOException {
+    public void printTop5ByPriceDesc(List<Product> products) throws SAXException, ParserConfigurationException, IOException {
         HandleReader handleReader = new HandleReader();
         List<Product> sortedByPrice = comparator.sortBy(products, "price");
         if (handleReader.isSortAsc("price")) comparator.reverseList(sortedByPrice);

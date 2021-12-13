@@ -10,8 +10,13 @@ public class HandleReader {
 
     Reader reader = new Reader();
 
-    public boolean isSortAsc(String attributeName) throws IOException, SAXException, ParserConfigurationException {
-        Map<String, String> xmlData = reader.readXmlConfigSort();
+    public boolean isSortAsc(String attributeName){
+        Map<String, String> xmlData = null;
+        try {
+            xmlData = reader.readXmlConfigSort();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
         return xmlData.get(attributeName).equals("asc");
     }
 
@@ -27,6 +32,8 @@ public class HandleReader {
         for ( String key : xmlData.keySet() ) {
             attributes.add(key);
         }
+
+        Collections.reverse(attributes);
 
         return attributes;
     }
