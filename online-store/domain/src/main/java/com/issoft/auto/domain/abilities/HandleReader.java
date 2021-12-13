@@ -4,8 +4,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class HandleReader {
 
@@ -16,4 +15,19 @@ public class HandleReader {
         return xmlData.get(attributeName).equals("asc");
     }
 
+    public List<String> attributeNames() {
+        Map<String, String> xmlData = null;
+        try {
+            xmlData = reader.readXmlConfigSort();
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+        List<String> attributes = new ArrayList<>();
+
+        for ( String key : xmlData.keySet() ) {
+            attributes.add(key);
+        }
+
+        return attributes;
+    }
 }

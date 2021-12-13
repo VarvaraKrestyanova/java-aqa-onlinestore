@@ -32,11 +32,12 @@ public class Store {
             System.out.println("\n" + "CATEGORY NAME: " + category.getName());
             System.out.println("\n" + "PRODUCTS: ");
             for(Product product: category.getProducts()){
-                System.out.println("Name: " + product.getName() + ", Rate: " + product.getPrice() + ", Price: " + product.getPrice());
+                System.out.println("Name: " + product.getName() + ", Rate: " + product.getRate() + ", Price: " + product.getPrice());
                 allProductsFromAllCategories.add(product);
             }
         }
     }
+
 
     public List<Product> getAllProducts() {
         return allProductsFromAllCategories;

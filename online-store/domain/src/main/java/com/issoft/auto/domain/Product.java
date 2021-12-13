@@ -1,6 +1,6 @@
 package com.issoft.auto.domain;
 
-public class Product {
+public class Product{
 
     private String name;
     private int rate;
@@ -23,5 +23,4 @@ public class Product {
     public double getPrice(){
         return price;
     }
-
 }
