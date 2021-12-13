@@ -82,6 +82,7 @@ public class Comparator {
                     } else break;
                 }
             }
+            sortedByFirstAtr = sortedProductsBy;
         }
 
         return sortedProductsBy;
