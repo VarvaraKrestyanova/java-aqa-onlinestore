@@ -20,9 +20,7 @@ public class Abilities {
         try {
             configSort = new Reader().readXmlConfigSort(filePackageName, fileName);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-            System.out.println("Entered configuration is wrong. Force Stopping the app");
-            quit();
+            throw new RuntimeException("Entered configuration is wrong. Force Stopping the app");
         }
     }
 
