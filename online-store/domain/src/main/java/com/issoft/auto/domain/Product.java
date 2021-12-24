@@ -23,4 +23,9 @@ public class Product{
     public double getPrice(){
         return price;
     }
+
+    @Override
+    public String toString() {
+        return "Product Name: " + name + ", Rate: " + rate + ", Price: " + price;
+    }
 }

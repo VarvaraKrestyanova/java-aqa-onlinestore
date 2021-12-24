@@ -1,24 +1,27 @@
 package com.issoft.auto.consoleApp;
 
-import com.issoft.auto.domain.Product;
-import com.issoft.auto.domain.abilities.Abilities;
-import com.issoft.auto.domain.abilities.Reader;
+import com.issoft.auto.store.abilities.Abilities;
 import com.issoft.auto.store.Store;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class StoreApp {
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, IOException, SAXException, ParserConfigurationException, NoSuchMethodException, InvocationTargetException {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, IOException, SAXException, ParserConfigurationException {
         Store store = new Store();
-        Abilities abilities = new Abilities();
+
+        System.out.println("Please, enter PACKAGE name containing xml file with store parameters (e.g. domain): ");
+        Scanner scanner = new Scanner(System.in);
+        String filePackageName = scanner.nextLine();
+        System.out.println("Please, enter xml FILE name containing store parameters (e.g. configSort): ");
+        String fileName = scanner.nextLine();
+
+        Abilities abilities = new Abilities(filePackageName, fileName);
 
         System.out.print("---------------------" + "\n" + "WELCOME TO THE STORE!" + "\n" + "---------------------");
-        store.printStoreData();
 
         Scanner in = new Scanner(System.in);
         int chosenAbility = 0;
@@ -32,7 +35,8 @@ public class StoreApp {
             chosenAbility = in.nextInt();
             switch (chosenAbility){
                 case 1: store.printStoreData(); break;
-                case 2: abilities.sortAndPrint(store.getAllProducts());break;
+                case 2:
+                    abilities.sortAndPrint(store.getAllProducts());break;
                 case 3: abilities.printTop5ByPriceDesc(store.getAllProducts());break;
                 case 4: abilities.quit();
             }

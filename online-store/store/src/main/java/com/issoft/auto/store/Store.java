@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.issoft.auto.domain.Category;
 import com.issoft.auto.domain.Product;
+import com.issoft.auto.store.utils.Helper;
+
+import static com.issoft.auto.store.utils.Helper.printProducts;
 
 public class Store {
 
@@ -24,22 +27,23 @@ public class Store {
         this.categories = randomStorePopulator.getCategoriesForShop();
     }
 
-    private List<Product> allProductsFromAllCategories = new ArrayList<>();
-
     public void printStoreData() {
         for (Category category: categories){
             System.out.println("\n" + "--------------------------------------------");
             System.out.println("\n" + "CATEGORY NAME: " + category.getName());
             System.out.println("\n" + "PRODUCTS: ");
-            for(Product product: category.getProducts()){
-                System.out.println("Name: " + product.getName() + ", Rate: " + product.getRate() + ", Price: " + product.getPrice());
-                allProductsFromAllCategories.add(product);
-            }
+            Helper.printProducts(category.getProducts());
         }
     }
 
 
     public List<Product> getAllProducts() {
+        List<Product> allProductsFromAllCategories = new ArrayList<>();
+        for (Category category: categories){
+            for(Product product: category.getProducts()){
+                allProductsFromAllCategories.add(product);
+            }
+        }
         return allProductsFromAllCategories;
     }
 

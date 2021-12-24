@@ -1,4 +1,4 @@
-package com.issoft.auto.domain.abilities;
+package com.issoft.auto.store.abilities;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,14 +10,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Reader {
-    File xmlFile = new File("domain/src/main/resources/configSort.xml");
-    private Map<String, String> xmlData = new HashMap<>();
 
-    public Map<String, String> readXmlConfigSort() throws ParserConfigurationException, IOException, SAXException {
+    public Map<String, String> readXmlConfigSort(String packageName, String fileName) throws ParserConfigurationException, IOException, SAXException {
+        String xmlPath = packageName + "/src/main/resources/" + fileName + ".xml";
+        File xmlFile = new File(xmlPath);
+
+        Map<String, String> xmlData = new LinkedHashMap<>();
+
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(xmlFile);
