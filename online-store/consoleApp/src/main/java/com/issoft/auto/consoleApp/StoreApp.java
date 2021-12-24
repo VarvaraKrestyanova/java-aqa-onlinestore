@@ -13,11 +13,17 @@ public class StoreApp {
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, IOException, SAXException, ParserConfigurationException {
         Store store = new Store();
 
-        System.out.println("Please, enter PACKAGE name containing xml file with store parameters (e.g. domain): ");
+        System.out.println("Please, enter PACKAGE name containing xml file with store parameters (enter '1' if it's default value - domain): ");
         Scanner scanner = new Scanner(System.in);
         String filePackageName = scanner.nextLine();
-        System.out.println("Please, enter xml FILE name containing store parameters (e.g. configSort): ");
+        if (filePackageName.equals("1")){
+            filePackageName = "domain";
+        }
+        System.out.println("Please, enter xml FILE name containing store parameters (enter '1' if it's default value - configSort): ");
         String fileName = scanner.nextLine();
+        if (fileName.equals("1")){
+            fileName = "configSort";
+        }
 
         Abilities abilities = new Abilities(filePackageName, fileName);
 
