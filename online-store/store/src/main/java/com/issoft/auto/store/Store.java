@@ -1,9 +1,13 @@
 package com.issoft.auto.store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.issoft.auto.domain.Category;
 import com.issoft.auto.domain.Product;
+import com.issoft.auto.store.utils.Helper;
+
+import static com.issoft.auto.store.utils.Helper.printProducts;
 
 public class Store {
 
@@ -28,10 +32,19 @@ public class Store {
             System.out.println("\n" + "--------------------------------------------");
             System.out.println("\n" + "CATEGORY NAME: " + category.getName());
             System.out.println("\n" + "PRODUCTS: ");
+            Helper.printProducts(category.getProducts());
+        }
+    }
+
+
+    public List<Product> getAllProducts() {
+        List<Product> allProductsFromAllCategories = new ArrayList<>();
+        for (Category category: categories){
             for(Product product: category.getProducts()){
-                System.out.println("Name: " + product.getName() + ", Rate: " + product.getPrice() + ", Price: " + product.getPrice());
+                allProductsFromAllCategories.add(product);
             }
         }
+        return allProductsFromAllCategories;
     }
 
 }

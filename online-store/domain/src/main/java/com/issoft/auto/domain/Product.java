@@ -1,6 +1,6 @@
 package com.issoft.auto.domain;
 
-public class Product {
+public class Product{
 
     private String name;
     private int rate;
@@ -24,4 +24,8 @@ public class Product {
         return price;
     }
 
+    @Override
+    public String toString() {
+        return "Product Name: " + name + ", Rate: " + rate + ", Price: " + price;
+    }
 }
