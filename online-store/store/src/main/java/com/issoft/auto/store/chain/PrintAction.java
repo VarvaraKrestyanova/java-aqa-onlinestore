@@ -13,5 +13,10 @@ public class PrintAction extends Action{
         store.printStoreData();
     }
 
+    @Override
+    public String getCommandName(){
+        return "print";
+    }
+
 
 }

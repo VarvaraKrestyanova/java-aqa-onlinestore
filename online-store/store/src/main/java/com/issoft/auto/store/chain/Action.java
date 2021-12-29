@@ -20,19 +20,16 @@ public abstract class Action {
 
     public void callTheAction(int request, Store store, Abilities abilities) throws InstantiationException, IllegalAccessException {
         if (request == actionNumber) {
-            Field[] declaredFields = ActionNumber.class.getDeclaredFields();
-            for (Field field : declaredFields){
-                if (field.getInt(field) == request){
-                    System.out.println("**********************\nChosen option is " + field.getName() + "\n**********************\n");
-                }
-            }
+            System.out.println("**********************\nChosen option is " + getCommandName() + "\n**********************\n");
             writeData(store, abilities);
-        }
-        if (nextAction != null) {
-            nextAction.callTheAction(request, store, abilities);
+        } else {
+            if (nextAction != null) {
+                nextAction.callTheAction(request, store, abilities);
+            }
         }
     }
 
     public abstract void writeData(Store store, Abilities abilities) throws IllegalAccessException, InstantiationException;
 
+    public abstract String getCommandName();
 }

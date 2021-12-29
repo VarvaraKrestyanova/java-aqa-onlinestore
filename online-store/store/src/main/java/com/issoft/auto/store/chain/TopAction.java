@@ -13,4 +13,9 @@ public class TopAction extends Action{
     public void writeData(Store store, Abilities abilities) {
         abilities.printTop5ByPriceDesc(store.getAllProducts());
     }
+
+    @Override
+    public String getCommandName(){
+        return "top";
+    }
 }

@@ -13,4 +13,9 @@ public class QuitAction extends Action{
     public void writeData(Store store, Abilities abilities) {
         abilities.quit();
     }
+
+    @Override
+    public String getCommandName(){
+        return "quit";
+    }
 }

@@ -13,4 +13,9 @@ public class SortAction extends Action{
     public void writeData(Store store, Abilities abilities) {
         abilities.sortAndPrint(store.getAllProducts());
     }
+
+    @Override
+    public String getCommandName(){
+        return "sort";
+    }
 }

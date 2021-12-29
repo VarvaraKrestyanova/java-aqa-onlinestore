@@ -10,10 +10,10 @@ public class StoreApp {
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
 
-        Action printAction = new PrintAction(ActionNumber.PRINT);
-        Action sortAction = new SortAction(ActionNumber.SORT);
-        Action topAction = new TopAction(ActionNumber.TOP);
-        Action quitAction = new QuitAction(ActionNumber.QUIT);
+        Action printAction = new PrintAction(AvailableAction.PRINT.getActionNumber());
+        Action sortAction = new SortAction(AvailableAction.SORT.getActionNumber());
+        Action topAction = new TopAction(AvailableAction.TOP.getActionNumber());
+        Action quitAction = new QuitAction(AvailableAction.QUIT.getActionNumber());
 
         printAction.setNextAction(sortAction);
         sortAction.setNextAction(topAction);
