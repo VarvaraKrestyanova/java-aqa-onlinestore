@@ -3,7 +3,7 @@ package com.issoft.auto.store.chain;
 import com.issoft.auto.store.Store;
 import com.issoft.auto.store.abilities.Abilities;
 
-public class SortAction extends Action{
+public class SortAction extends Action {
 
     public SortAction(int actionNumber) {
         super(actionNumber);
@@ -18,4 +18,5 @@ public class SortAction extends Action{
     public String getCommandName(){
         return "sort";
     }
+
 }
