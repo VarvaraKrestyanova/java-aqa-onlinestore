@@ -7,8 +7,6 @@ import com.issoft.auto.domain.Category;
 import com.issoft.auto.domain.Product;
 import com.issoft.auto.store.utils.Helper;
 
-import static com.issoft.auto.store.utils.Helper.printProducts;
-
 public class Store {
 
     RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
