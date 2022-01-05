@@ -31,7 +31,7 @@ public class Abilities {
 
 
 
-    public void printTop5ByPriceDesc(List<Product> products) throws SAXException, ParserConfigurationException, IOException {
+    public void printTop5ByPriceDesc(List<Product> products) {
         Map<String, String> sortMap = new HashMap<>();
         sortMap.put("price", "desc");
 
