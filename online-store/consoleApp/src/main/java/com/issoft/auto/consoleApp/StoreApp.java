@@ -13,11 +13,13 @@ public class StoreApp {
         Action printAction = new PrintAction(AvailableAction.PRINT.getActionNumber());
         Action sortAction = new SortAction(AvailableAction.SORT.getActionNumber());
         Action topAction = new TopAction(AvailableAction.TOP.getActionNumber());
+        Action orderAction = new OrderAction(AvailableAction.ORDER.getActionNumber());
         Action quitAction = new QuitAction(AvailableAction.QUIT.getActionNumber());
 
         printAction.setNextAction(sortAction);
         sortAction.setNextAction(topAction);
-        topAction.setNextAction(quitAction);
+        topAction.setNextAction(orderAction);
+        orderAction.setNextAction(quitAction);
 
         System.out.println("Please, enter PACKAGE name containing xml file with store parameters (enter '1' if it's default value - domain): ");
         Scanner scanner = new Scanner(System.in);
@@ -44,7 +46,8 @@ public class StoreApp {
             System.out.println("\n" + "'print' - Input 1 to print all Categories and Products");
             System.out.println("\n" + "'sort' - Input 2 to print sorted Products by all attributes");
             System.out.println("\n" + "'top' - Input 3 to print top 5 Products");
-            System.out.println("\n" + "'quit' - Input 4 to exit");
+            System.out.println("\n" + "'order' - Input 4 to order Products");
+            System.out.println("\n" + "'quit' - Input 5 to exit");
 
             chosenAbility = in.nextInt();
             printAction.callTheAction(chosenAbility, store, abilities);
