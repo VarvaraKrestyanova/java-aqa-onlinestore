@@ -4,7 +4,9 @@ public enum AvailableAction {
     PRINT (1),
     SORT (2),
     TOP (3),
-    QUIT (4);
+    ORDER (4),
+    CLEANORDER(5),
+    QUIT (6);
 
     private int actionNumber;
 
