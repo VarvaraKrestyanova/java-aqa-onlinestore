@@ -5,11 +5,13 @@ public class Product{
     private String name;
     private int rate;
     private double price;
+    private String categoryName;
 
-    public Product(String name, int rate, double price){
+    public Product(String name, int rate, double price, String categoryName){
         this.name = name;
         this.rate = rate;
         this.price = price;
+        this.categoryName = categoryName;
     }
 
     public String getName(){
@@ -22,6 +24,10 @@ public class Product{
 
     public double getPrice(){
         return price;
+    }
+
+    public String getCategoryName(){
+        return categoryName;
     }
 
     @Override
