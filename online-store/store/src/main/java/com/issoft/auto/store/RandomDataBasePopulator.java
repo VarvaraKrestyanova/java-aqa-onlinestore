@@ -15,10 +15,7 @@ public class RandomDataBasePopulator implements IPopulator {
     public List<Category> getCategoriesForShop() {
 
         try {
-            if (DBManager.isDBTableAvailable("CATEGORY") & DBManager.isDBTableAvailable("PRODUCT")){
-                createDBTableWithRandomData();
-            }
-
+            createDBTableWithRandomData();
         } catch (SQLException | InstantiationException | IllegalAccessException throwables) {
             throwables.printStackTrace();
         }
@@ -47,11 +44,13 @@ public class RandomDataBasePopulator implements IPopulator {
         DBManager.createCategoryTableForDB();
         DBManager.createProductTableForDB();
 
-        for (Category category : categories){
-            DBManager.addRandomCategoryToCategoryTable(category.getName());
-            List<Product> productsOfCategory = category.getProducts();
-            for (Product product : productsOfCategory){
-                DBManager.addRandomProductToProductTable(product);
+        if (DBManager.doesTableHaveData() == false) {
+            for (Category category : categories){
+                DBManager.addRandomCategoryToCategoryTable(category.getName());
+                List<Product> productsOfCategory = category.getProducts();
+                for (Product product : productsOfCategory){
+                    DBManager.addRandomProductToProductTable(product);
+                }
             }
         }
     }

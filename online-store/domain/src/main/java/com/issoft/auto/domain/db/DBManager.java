@@ -17,12 +17,13 @@ public class DBManager {
         List<Category> categories = new ArrayList<>();
 
         try {
-            //Connection connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(url, user, password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM CATEGORY;");
             while (resultSet.next()){
                 categories.add(new Category(resultSet.getString("NAME")));
             }
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -34,13 +35,14 @@ public class DBManager {
         List<Product> products = new ArrayList<>();
 
         try {
-            //connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(url, user, password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
             while (resultSet.next()){
                 products.add(new Product
                         (resultSet.getString("NAME"), resultSet.getInt("RATE"), resultSet.getDouble("PRICE"), resultSet.getString("CATEGORY_NAME")));
             }
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -52,25 +54,17 @@ public class DBManager {
     ***IF WE HAVEN'T AVAILABLE DB TABLE***
     *************************************/
 
-    public static boolean isDBTableAvailable(String tableNamePatterm) throws SQLException {
-        DatabaseMetaData databaseMetaData  = connection.getMetaData();
-        ResultSet resultSet = databaseMetaData.getTables(null, null, tableNamePatterm, new String[]{"TABLE"});
-        return resultSet.next();
-    }
-
     public static void createCategoryTableForDB(){
         try {
-
+            Connection connection = ConnectionUtil.getConnection(url, user, password);
             Statement statement = connection.createStatement();
-            statement.executeQuery("CREATE TABLE \"CATEGORY\"\n" +
-                    "(\n" +
-                    "  \"NAME\" VARCHAR(255) NOT NULL,\n" +
-                    "  CONSTRAINT \"CATEGORY_PKEY\" PRIMARY KEY (\"NAME\")\n" +
+            statement.execute("CREATE TABLE IF NOT EXISTS \"CATEGORY\"" +
+                    "(" +
+                    "  \"NAME\" VARCHAR(255) NOT NULL" +
                     ");");
-
             statement.close();
             connection.commit();
-
+            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -79,18 +73,18 @@ public class DBManager {
     public static void createProductTableForDB(){
         try {
 
+            Connection connection = ConnectionUtil.getConnection(url, user, password);
             Statement statement = connection.createStatement();
-            statement.executeQuery("CREATE TABLE \"PRODUCT\"\n" +
-                    " (\n" +
-                    "\"NAME\" VARCHAR(255) NOT NULL,\n" +
-                    "\"RATE\" INT NOT NULL,\n" +
-                    "\"PRICE\" DOUBLE NOT NULL,\n" +
-                    "\"CATEGORY_NAME\" VARCHAR(255) NOT NULL,\n" +
-                    "CONSTRAINT \"PRODUCT_FKEY\" FOREIGN KEY (\"NAME\") REFERENCES \"CATEGORY\" (\"NAME\")\n" +
+            statement.execute("CREATE TABLE IF NOT EXISTS \"PRODUCT\"" +
+                    " (" +
+                    "\"NAME\" VARCHAR(255) NOT NULL," +
+                    "\"RATE\" INT NOT NULL," +
+                    "\"PRICE\" DOUBLE NOT NULL," +
+                    "\"CATEGORY_NAME\" VARCHAR(255) NOT NULL" +
                     ");");
-
             statement.close();
             connection.commit();
+            connection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -98,38 +92,28 @@ public class DBManager {
     }
 
     public static void addRandomCategoryToCategoryTable(String categoryName) throws SQLException {
+        Connection connection = ConnectionUtil.getConnection(url, user, password);
         Statement statement = connection.createStatement();
         statement.execute(String.format("INSERT INTO CATEGORY VALUES ('%s')", categoryName));
+        connection.close();
     }
 
     public static void addRandomProductToProductTable(Product product) throws SQLException {
+        Connection connection = ConnectionUtil.getConnection(url, user, password);
         Statement statement = connection.createStatement();
-        statement.execute(String.format("INSERT INTO PRODUCT VALUES ('%s',%d,%f,'%s')", product.getName(), product.getRate(), product.getPrice(), product.getCategoryName()));
+        statement.execute(String.format("INSERT INTO PRODUCT VALUES ('%s',%d, %d,'%s')", product.getName(), product.getRate(), product.getPrice(), product.getCategoryName()));
+        connection.close();
     }
 
-    /**************************
-     * Connection *************
-     *************************/
-
-    public static Connection connection = null;
-
-    public DBManager(){
-        if (connection == null){
-            connection = ConnectionUtil.getConnection(url, user, password);
+    public static boolean doesTableHaveData() throws SQLException {
+        boolean isDataExist = false;
+        Connection connection = ConnectionUtil.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
+        if (resultSet.next()){
+            isDataExist = true;
         }
+        return isDataExist;
     }
-
-    public static void closeConnectionAndAddNull(){
-        try {
-            if (connection != null){
-                connection.close();
-            }
-        } catch (SQLException throwables) {
-            System.out.println("Exception during DB closing: " + throwables.getMessage());
-        }
-        connection = null;
-    }
-
-
 
 }
