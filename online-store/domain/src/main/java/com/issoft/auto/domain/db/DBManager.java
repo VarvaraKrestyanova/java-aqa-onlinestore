@@ -9,15 +9,16 @@ import java.util.List;
 
 public class DBManager {
 
-    private static final String url = "jdbc:h2:~/OnlineStoreData";
-    private static final String user = "***";
-    private static final String password = "***";
+    private static final String URL = "db.url";
+    private static final String USER = "user";
+    private static final String PASSWORD = "password";
+
 
     public static List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
 
         try {
-            Connection connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM CATEGORY;");
             while (resultSet.next()){
@@ -35,7 +36,7 @@ public class DBManager {
         List<Product> products = new ArrayList<>();
 
         try {
-            Connection connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
             while (resultSet.next()){
@@ -56,7 +57,7 @@ public class DBManager {
 
     public static void createCategoryTableForDB(){
         try {
-            Connection connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS \"CATEGORY\"" +
                     "(" +
@@ -73,7 +74,7 @@ public class DBManager {
     public static void createProductTableForDB(){
         try {
 
-            Connection connection = ConnectionUtil.getConnection(url, user, password);
+            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS \"PRODUCT\"" +
                     " (" +
@@ -92,22 +93,22 @@ public class DBManager {
     }
 
     public static void addRandomCategoryToCategoryTable(String categoryName) throws SQLException {
-        Connection connection = ConnectionUtil.getConnection(url, user, password);
+        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
         Statement statement = connection.createStatement();
         statement.execute(String.format("INSERT INTO CATEGORY VALUES ('%s')", categoryName));
         connection.close();
     }
 
     public static void addRandomProductToProductTable(Product product) throws SQLException {
-        Connection connection = ConnectionUtil.getConnection(url, user, password);
+        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
         Statement statement = connection.createStatement();
-        statement.execute(String.format("INSERT INTO PRODUCT VALUES ('%s',%d, %d,'%s')", product.getName(), product.getRate(), product.getPrice(), product.getCategoryName()));
+        statement.execute(String.format("INSERT INTO PRODUCT VALUES ('%s',%d, %f,'%s')", product.getName(), product.getRate(), product.getPrice(), product.getCategoryName()));
         connection.close();
     }
 
     public static boolean doesTableHaveData() throws SQLException {
         boolean isDataExist = false;
-        Connection connection = ConnectionUtil.getConnection(url, user, password);
+        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
         if (resultSet.next()){

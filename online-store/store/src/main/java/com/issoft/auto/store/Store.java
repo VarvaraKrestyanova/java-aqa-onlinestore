@@ -10,9 +10,6 @@ import com.issoft.auto.store.utils.Helper;
 
 public class Store {
 
-    RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
-    RandomDataBasePopulator randomDataBasePopulator = new RandomDataBasePopulator();
-
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
@@ -30,8 +27,10 @@ public class Store {
         String chosenStore = scanner.nextLine();
 
         if (chosenStore.equals("-")){
+            RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
             this.categories = randomStorePopulator.getCategoriesForShop();
         } else {
+            RandomDataBasePopulator randomDataBasePopulator = new RandomDataBasePopulator();
             this.categories = randomDataBasePopulator.getCategoriesForShop();
         }
     }

@@ -10,7 +10,6 @@ public class ConnectionUtil {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(serverUrl, userName, password);
         } catch (SQLException | ClassNotFoundException throwables) {
-            //DBManager.closeConnectionAndAddNull();
             throwables.printStackTrace();
         }
         return connection;
