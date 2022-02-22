@@ -9,24 +9,28 @@ import java.util.List;
 
 public class DBManager {
 
-    private static final String URL = "db.url";
-    private static final String USER = "user";
-    private static final String PASSWORD = "password";
-
 
     public static List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
 
+        Connection connection = null;
+        Statement statement = null;
         try {
-            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
-            Statement statement = connection.createStatement();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM CATEGORY;");
             while (resultSet.next()){
                 categories.add(new Category(resultSet.getString("NAME")));
             }
-            connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
         return categories;
@@ -35,20 +39,30 @@ public class DBManager {
     public static List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
 
+        Connection connection = null;
+        Statement statement = null;
         try {
-            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
-            Statement statement = connection.createStatement();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 products.add(new Product
                         (resultSet.getString("NAME"), resultSet.getInt("RATE"), resultSet.getDouble("PRICE"), resultSet.getString("CATEGORY_NAME")));
             }
+            statement.close();
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
 
-        return products;
+            return products;
+        }
     }
 
     /*************************************
@@ -57,7 +71,7 @@ public class DBManager {
 
     public static void createCategoryTableForDB(){
         try {
-            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS \"CATEGORY\"" +
                     "(" +
@@ -74,7 +88,7 @@ public class DBManager {
     public static void createProductTableForDB(){
         try {
 
-            Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
+            Connection connection = ConnectionUtil.getConnection();
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS \"PRODUCT\"" +
                     " (" +
@@ -93,25 +107,28 @@ public class DBManager {
     }
 
     public static void addRandomCategoryToCategoryTable(String categoryName) throws SQLException {
-        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
+        Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
         statement.execute(String.format("INSERT INTO CATEGORY VALUES ('%s')", categoryName));
+        statement.close();
         connection.close();
     }
 
     public static void addRandomProductToProductTable(Product product) throws SQLException {
-        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
+        Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
         statement.execute(String.format("INSERT INTO PRODUCT VALUES ('%s',%d, %f,'%s')", product.getName(), product.getRate(), product.getPrice(), product.getCategoryName()));
+        statement.close();
         connection.close();
     }
 
     public static boolean doesTableHaveData() throws SQLException {
         boolean isDataExist = false;
-        Connection connection = ConnectionUtil.getConnection(PropertiesUtil.get(URL), PropertiesUtil.get(USER), PropertiesUtil.get(PASSWORD));
+        Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCT;");
-        if (resultSet.next()){
+        ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM PRODUCT;");
+        resultSet.next();
+        if (resultSet.getInt(1) > 0){
             isDataExist = true;
         }
         return isDataExist;
