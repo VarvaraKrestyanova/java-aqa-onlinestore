@@ -2,14 +2,13 @@ package com.issoft.auto.store;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.issoft.auto.domain.Category;
 import com.issoft.auto.domain.Product;
 import com.issoft.auto.store.utils.Helper;
 
 public class Store {
-
-    RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
@@ -22,7 +21,18 @@ public class Store {
     }
 
     public Store() throws InstantiationException, IllegalAccessException {
-        this.categories = randomStorePopulator.getCategoriesForShop();
+        System.out.println("Please, enter '+' if you wanna see the store from Data Base!");
+        System.out.println("Please, enter any other symbol if you wanna see the Random default store!");
+        Scanner scanner = new Scanner(System.in);
+        String chosenStore = scanner.nextLine();
+
+        if (chosenStore.equals("-")){
+            RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
+            this.categories = randomStorePopulator.getCategoriesForShop();
+        } else {
+            RandomDataBasePopulator randomDataBasePopulator = new RandomDataBasePopulator();
+            this.categories = randomDataBasePopulator.getCategoriesForShop();
+        }
     }
 
     public void printStoreData() {
