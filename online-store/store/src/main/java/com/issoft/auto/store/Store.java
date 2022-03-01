@@ -1,5 +1,6 @@
 package com.issoft.auto.store;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,20 +16,24 @@ public class Store {
     }
 
     private List<Category> categories;
+    private static Store store;
 
     public List<Category> getCategories() {
         return categories;
     }
 
-    public Store() throws InstantiationException, IllegalAccessException {
-        System.out.println("Please, enter '+' if you wanna see the store from Data Base!");
+    public Store() throws InstantiationException, IllegalAccessException, IOException {
+        System.out.println("Please, enter '1' if you wanna see the store from Data Base and '2' if from Server!");
         System.out.println("Please, enter any other symbol if you wanna see the Random default store!");
         Scanner scanner = new Scanner(System.in);
         String chosenStore = scanner.nextLine();
 
-        if (chosenStore.equals("-")){
+        if (chosenStore.equals("1")){
             RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
             this.categories = randomStorePopulator.getCategoriesForShop();
+        } else if (chosenStore.equals("2")){
+            RandomHttpPopulator randomHttpPopulator = new RandomHttpPopulator();
+            this.categories = randomHttpPopulator.getCategoriesForShop();
         } else {
             RandomDataBasePopulator randomDataBasePopulator = new RandomDataBasePopulator();
             this.categories = randomDataBasePopulator.getCategoriesForShop();
@@ -53,6 +58,13 @@ public class Store {
             }
         }
         return allProductsFromAllCategories;
+    }
+
+    public static Store getInstance() throws IllegalAccessException, InstantiationException, IOException {
+        if (store==null) {
+            store = new Store();
+        }
+        return store;
     }
 
 }
